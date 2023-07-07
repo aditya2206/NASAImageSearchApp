@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">NASAImageSearchApp</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="creation_date">Date Created</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity_nasaitem">NASAItemActivity</string>
 </resources>
