@@ -7,7 +7,7 @@ class FetchAPIData {
 
     private val apiService = APIClient.apiService
 
-    suspend fun fetchData(): RootCollectionModel {
-        return apiService.fetchData()
+    suspend fun fetchData(searchQuery: String): RootCollectionModel {
+        return apiService.fetchData(searchQuery)
     }
 }

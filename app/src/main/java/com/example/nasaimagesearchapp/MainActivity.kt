@@ -3,35 +3,38 @@ package com.example.nasaimagesearchapp
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import com.example.nasaimagesearchapp.data.remote.APIClient.apiService
+import androidx.lifecycle.ViewModelProvider
 import com.example.nasaimagesearchapp.data.model.ImageModel
-import com.example.nasaimagesearchapp.ui.ImageListContent
+import com.example.nasaimagesearchapp.data.repository.FetchAPIData
+import com.example.nasaimagesearchapp.ui.screens.ImageListContent
 import com.example.nasaimagesearchapp.ui.theme.MyTheme
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.example.nasaimagesearchapp.ui.viewmodel.ImageViewModel
+import com.example.nasaimagesearchapp.ui.viewmodel.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var imageViewModel: ImageViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Making API calls using MVVM Architecture
+        val fetchAPIData = FetchAPIData()
+        imageViewModel = ViewModelProvider(this, ViewModelFactory(fetchAPIData)).get(ImageViewModel::class.java)
+        imageViewModel.fetchImages()
+
         setContent {
             MyTheme {
-                MyApp {
-                    startActivity(NASAItemActivity.newIntent(this, it))
-                }
-            }
-        }
-
-        GlobalScope.launch {
-            val result = apiService.fetchData();
-
-            if(result != null){
-                Log.d("Yo", result.collection.items.get(0).data.get(0).title)
+                MyApp (
+                    imageViewModel = imageViewModel,
+                    navigateToImageModel = { imageModel ->
+                        startActivity(NASAItemActivity.newIntent(this, imageModel))
+                    }
+                )
             }
         }
     }
@@ -39,10 +42,10 @@ class MainActivity : AppCompatActivity() {
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MyApp(navigateToImageModel: (ImageModel) -> Unit) {
+fun MyApp(imageViewModel: ImageViewModel, navigateToImageModel: (ImageModel) -> Unit) {
     Scaffold(
         content = {
-            ImageListContent(navigateToImageModel = navigateToImageModel)
+            ImageListContent(imageViewModel, navigateToImageModel = navigateToImageModel)
         }
     )
 }

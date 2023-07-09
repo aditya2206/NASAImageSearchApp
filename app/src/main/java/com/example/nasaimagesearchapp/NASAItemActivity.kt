@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.nasaimagesearchapp.data.model.ImageModel
-import com.example.nasaimagesearchapp.ui.NASAItemScreen
+import com.example.nasaimagesearchapp.ui.screens.NASAItemScreen
 
 class NASAItemActivity : ComponentActivity() {
 
