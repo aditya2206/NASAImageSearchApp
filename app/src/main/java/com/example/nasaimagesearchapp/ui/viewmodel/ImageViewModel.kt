@@ -18,6 +18,7 @@ class ImageViewModel(private val fetchAPIData: FetchAPIData) : ViewModel() {
     val images: LiveData<List<ImageModel>> = _images
 
     private val _searchQuery = MutableLiveData<String>("")
+    var searchQuery: String = _searchQuery.value.toString()
 
     fun fetchImages() {
         viewModelScope.launch {
@@ -60,6 +61,7 @@ class ImageViewModel(private val fetchAPIData: FetchAPIData) : ViewModel() {
 
     fun updateSearchQuery(query: String) {
         viewModelScope.launch {
+            searchQuery = query
             searchQueryChannel.emit(query)
         }
     }
